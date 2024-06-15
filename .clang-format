@@ -1,0 +1,11 @@
+---
+Language: Cpp
+Standard: Cpp11
+TabWidth: 1
+IndentWidth: 2
+UseTab: Never
+BreakBeforeBraces: Attach
+PointerAlignment: Left
+ColumnLimit: 0
+AllowShortBlocksOnASingleLine: true 
+AllowShortIfStatementsOnASingleLine: true
