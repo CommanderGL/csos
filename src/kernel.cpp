@@ -43,6 +43,7 @@ void kernel_main(unsigned long magic, unsigned long addr) {
   asm("cli");
   remapPIC(0x20, 0x28);
   maskIRQ(ALL);
+  unmaskIRQ(KEYBOARD);
   loadExceptions();
   addInt(35, keyboard_handler, 0);
   keyboard_init(kbm_poll);
@@ -70,6 +71,11 @@ void kernel_main(unsigned long magic, unsigned long addr) {
   memcpy((uint32_t*)mbi->framebuffer_addr, fb_addr, sizeof(fb_addr));
 
   inportb(0x60);
+
+  while ((inportb(0x3f8 + 5) & 0x20) == 0) {}
+  outportb(0x3f8, 'H');
+  while ((inportb(0x3f8 + 5) & 0x20) == 0) {}
+  outportb(0x3f8, 'i');
 
   // asm("int $33");
 
