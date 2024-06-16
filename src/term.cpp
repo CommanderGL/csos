@@ -5,7 +5,7 @@ char* strcpy(char* strDest, const char* strSrc) {
   return strDest;
 }
 
-Term::Term(const char* prompt, int xMargin, int yMargin, struct Framebuffer fb, char data[TERM_HEIGHT * TERM_WIDTH], bool doubleSize) {
+Term::Term(const char* prompt, int xMargin, int yMargin, struct Framebuffer fb, char data[TERM_WIDTH * TERM_HEIGHT], bool doubleSize) {
   this->prompt = prompt;
   this->xMargin = xMargin;
   this->yMargin = yMargin;

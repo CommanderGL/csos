@@ -34,7 +34,11 @@ geniso:
 	./geniso.sh
 
 dev: all geniso
-	qemu-system-i386 -cdrom bin/csos-grub.iso
+	qemu-system-i386 -cdrom bin/csos-grub.iso -display gtk,show-tabs=on
+
+dev-gdb: all geniso
+	qemu-system-i386 -cdrom bin/csos-grub.iso -display gtk,show-tabs=on -s -S &
+	gdb vmlinux
 
 clean:
 	rm -rf bin/* build/**/*.o build/*.o

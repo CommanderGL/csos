@@ -9,7 +9,7 @@
 #include "ints.h"
 #include "pic.h"
 
-extern uint32_t fb_addr[SCREEN_WIDTH * SCREEN_HEIGHT];
+extern uint32_t fb_addr[2000 * 2000];
 extern struct Framebuffer fb;
 extern multiboot_info_t* mbi;
 
@@ -51,12 +51,12 @@ void panic(const char* message) {
   clr_screen(CATPPUCCIN_BASE, fb);
 
   const int lines = 11;
-  const int yOffset = SCREEN_HEIGHT / 2 - lines * CHAR_SIZE_2 / 2;
+  const int yOffset = fb.height / 2 - lines * CHAR_SIZE_2 / 2;
 
-  print2("<SYSTEM ERROR>", SCREEN_WIDTH / 2 - strlen("<SYSTEM ERROR>") * CHAR_SIZE_2 / 2, yOffset, CATPPUCCIN_RED, CATPPUCCIN_BASE, fb);
-  print2("An exception Has Occured (your system has messed up):", SCREEN_WIDTH / 2 - strlen("An exception Has Occured (your system has messed up):") * CHAR_SIZE_2 / 2, yOffset + CHAR_SIZE_2 * 2, CATPPUCCIN_RED, CATPPUCCIN_BASE, fb);
-  print2(message, SCREEN_WIDTH / 2 - strlen(message) * CHAR_SIZE_2 / 2, yOffset + CHAR_SIZE_2 * 4, CATPPUCCIN_RED, CATPPUCCIN_BASE, fb);
-  print2("<SYSTEM HALTED>", SCREEN_WIDTH / 2 - strlen("<SYSTEM HELATED>") * CHAR_SIZE_2 / 2, yOffset + CHAR_SIZE_2 * 10, CATPPUCCIN_RED, CATPPUCCIN_BASE, fb);
+  print2("<SYSTEM ERROR>", fb.width / 2 - strlen("<SYSTEM ERROR>") * CHAR_SIZE_2 / 2, yOffset, CATPPUCCIN_RED, CATPPUCCIN_BASE, fb);
+  print2("An exception Has Occured (your system has messed up):", fb.width / 2 - strlen("An exception Has Occured (your system has messed up):") * CHAR_SIZE_2 / 2, yOffset + CHAR_SIZE_2 * 2, CATPPUCCIN_RED, CATPPUCCIN_BASE, fb);
+  print2(message, fb.width / 2 - strlen(message) * CHAR_SIZE_2 / 2, yOffset + CHAR_SIZE_2 * 4, CATPPUCCIN_RED, CATPPUCCIN_BASE, fb);
+  print2("<SYSTEM HALTED>", fb.width / 2 - strlen("<SYSTEM HELATED>") * CHAR_SIZE_2 / 2, yOffset + CHAR_SIZE_2 * 10, CATPPUCCIN_RED, CATPPUCCIN_BASE, fb);
 
   memcpy((uint32_t*)mbi->framebuffer_addr, fb_addr, sizeof(fb_addr));
 
@@ -117,7 +117,7 @@ void int_12(void) {
 }
 
 void int_13(void) {
-  panic("Gneral Protection Fault");
+  panic("General Protection Fault");
 }
 
 void int_14(void) {

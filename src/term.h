@@ -7,8 +7,8 @@ extern "C" {
 #ifndef TERM_H
 #define TERM_H
 
-const int TERM_WIDTH = SCREEN_WIDTH / CHAR_SIZE;
-const int TERM_HEIGHT = SCREEN_HEIGHT / CHAR_SIZE;
+const int TERM_WIDTH = 1024 / CHAR_SIZE;
+const int TERM_HEIGHT = 768 / CHAR_SIZE;
 
 class Term {
 public:

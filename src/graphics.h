@@ -10,9 +10,6 @@ struct Framebuffer {
   int pitch;
 };
 
-#define SCREEN_WIDTH 1024
-#define SCREEN_HEIGHT 765
-
 #define CHAR_SIZE 8
 #define CHAR_SIZE_2 16
 
