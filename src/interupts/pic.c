@@ -1,31 +1,7 @@
 #include "pic.h"
 #include "../io.h"
 
-/* void remapPIC(int pic1, int pic2) {
-  byte md, sd;
-
-  md = inportb(MASTERDATA);
-  sd = inportb(SLAVEDATA);
-
-  outportb(MASTER, EOI);
-
-  outportb(MASTER, ICW1_INIT + ICW1_ICW4);
-  outportb(SLAVE, ICW1_INIT + ICW1_ICW4);
-
-  outportb(MASTERDATA, pic1);
-  outportb(SLAVEDATA, pic2);
-
-  outportb(MASTERDATA, 0x04);
-  outportb(SLAVEDATA, 0x02);
-
-  outportb(MASTERDATA, ICW4_8086);
-  outportb(SLAVEDATA, ICW4_8086);
-
-  outportb(MASTERDATA, md);
-  outportb(SLAVEDATA, sd);
-} */
-
-void remapPIC(int pic1, int pic2) {
+void remapPIC() {
   outportb(0x20, 0x11); /* ICW1 */
   outportb(0xA0, 0x11);
   outportb(0x21, 0x20); /* remap IRQ0~7 to 32~39 in interrupt vector */
@@ -41,7 +17,7 @@ void remapPIC(int pic1, int pic2) {
   outportb(0xA1, 0x00);
 }
 
-void maskIRQ(byte irq) {
+/* void maskIRQ(byte irq) {
   if (irq == ALL) {
     outportb(MASTERDATA, 0xFF);
     outportb(SLAVEDATA, 0xFF);
@@ -53,9 +29,23 @@ void maskIRQ(byte irq) {
     return;
   }
   outportb(SLAVEDATA, irq >> 8);
+} */
+
+void maskIRQ(uint8_t irq) {
+  uint16_t port;
+  uint8_t value;
+
+  if (irq < 8) {
+    port = 0x21;
+  } else {
+    port = 0xa1;
+    irq -= 8;
+  }
+  value = inportb(port) | (1 << irq);
+  outportb(port, value);
 }
 
-void unmaskIRQ(byte irq) {
+/* void unmaskIRQ(byte irq) {
   if (irq == ALL) {
     outportb(MASTERDATA, 0x00);
     outportb(SLAVEDATA, 0x00);
@@ -67,4 +57,18 @@ void unmaskIRQ(byte irq) {
     return;
   }
   outportb(SLAVEDATA, irq >> 8);
+} */
+
+void unmaskIRQ(uint8_t irq) {
+  uint16_t port;
+  uint8_t value;
+
+  if (irq < 8) {
+    port = 0x21;
+  } else {
+    port = 0xa1;
+    irq -= 8;
+  }
+  value = inportb(port) & ~(1 << irq);
+  outportb(port, value);
 }

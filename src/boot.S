@@ -43,8 +43,8 @@ multiboot_header:
   .long 0       
 #endif
   .long 0
-  .long 1024
-  .long 768
+  .long 1440
+  .long 900
   .long 32
 
 multiboot_entry:

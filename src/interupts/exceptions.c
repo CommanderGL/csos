@@ -9,7 +9,7 @@
 #include "ints.h"
 #include "pic.h"
 
-extern uint32_t fb_addr[2000 * 2000];
+extern uint32_t fb_addr[SCREEN_WIDTH * SCREEN_HEIGHT + 1];
 extern struct Framebuffer fb;
 extern multiboot_info_t* mbi;
 

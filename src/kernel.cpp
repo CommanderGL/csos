@@ -26,15 +26,20 @@ extern "C" {
 
 multiboot_info_t* mbi;
 
-uint32_t fb_addr[1024 * 768 + 1];
+uint32_t fb_addr[SCREEN_WIDTH * SCREEN_HEIGHT + 1];
 struct Framebuffer fb;
 
 void keyboard_handler_c() {
-  outportb(0x20, 0x20);
+  while ((inportb(0x3f8 + 5) & 0x20) == 0) {}
+  outportb(0x3f8, 'H');
+  while ((inportb(0x3f8 + 5) & 0x20) == 0) {}
+  outportb(0x3f8, 'i');
 
-  unsigned char scan_code = inportb(0x60);
+  inportb(0x60);
   print2("KEY!", 100, 50, CATPPUCCIN_YELLOW, CATPPUCCIN_BASE, fb);
   memcpy((uint32_t*)mbi->framebuffer_addr, fb_addr, sizeof(fb_addr));
+
+  outportb(0x20, 0x20);
 }
 
 void kernel_main(unsigned long magic, unsigned long addr) {
@@ -42,18 +47,18 @@ void kernel_main(unsigned long magic, unsigned long addr) {
   mbi = (multiboot_info_t*)addr;
 
   asm("cli");
-  remapPIC(0x20, 0x28);
+  remapPIC();
   maskIRQ(ALL);
   unmaskIRQ(KEYBOARD);
   loadExceptions();
-  addInt(35, keyboard_handler, 0);
+  addInt(33, keyboard_handler, 0);
   // keyboard_init(kbm_poll);
   loadIDTR();
   asm("sti");
 
   fb.addr = fb_addr;
-  fb.width = mbi->framebuffer_width;
-  fb.height = mbi->framebuffer_height;
+  fb.width = SCREEN_WIDTH;
+  fb.height = SCREEN_HEIGHT;
   fb.pitch = mbi->framebuffer_pitch;
 
   clr_screen(CATPPUCCIN_BASE, fb);
@@ -73,19 +78,13 @@ void kernel_main(unsigned long magic, unsigned long addr) {
   term.putChar('b', CATPPUCCIN_TEXT, CATPPUCCIN_BASE);
   term.putChar('C', CATPPUCCIN_TEXT, CATPPUCCIN_BASE);
 
-  memcpy((uint32_t*)mbi->framebuffer_addr, fb_addr, 2000 * 2000);
-
-  inportb(0x60);
+  memcpy((uint32_t*)mbi->framebuffer_addr, fb_addr, sizeof(fb_addr));
 
   while ((inportb(0x3f8 + 5) & 0x20) == 0) {}
   outportb(0x3f8, 'H');
   while ((inportb(0x3f8 + 5) & 0x20) == 0) {}
   outportb(0x3f8, 'i');
 
-  // asm("int $33");
-
-  for (;;) {
-    asm("hlt");
-  }
+  while (true) {}
 }
 }

@@ -98,9 +98,8 @@ int keyboard_init(kb_mode_t mode) {
   }
 
   send_command(0xEE);
-  unsigned char c = 0;
   while (inportb(KBC_STATUS) & 1) {
-    c = inportb(KBC_EA);
+    inportb(KBC_EA);
   }
 
   return 0;

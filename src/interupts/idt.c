@@ -13,7 +13,7 @@ void loadIDTR() {
 
 void addInt(int num, void (*handler)(), dword dpl) {
   word selector = 0x08;
-  word settings;
+  word settings = 0;
   dword offset = (dword)(long)handler;
 
   asm volatile("movw %%cs,%0" : "=g"(selector));

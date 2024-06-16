@@ -14,7 +14,7 @@ HEADER_DEPS := $(addprefix build/,$(CFILES:.c=.c.d) $(ASFILES:.S=.S.d) $(CXXFILE
 all: bin/csos-grub.bin
 
 bin/csos-grub.bin: linker.ld $(OBJ)
-	$(CC) -T linker.ld -o bin/csos-grub.bin -ffreestanding -O2 -nostdlib $(OBJ) -lgcc
+	$(CC) -T linker.ld -o bin/csos-grub.bin -ffreestanding -O2 -nostdlib -no-pie $(OBJ) -lgcc
 
 -include $(HEADER_DEPS)
 

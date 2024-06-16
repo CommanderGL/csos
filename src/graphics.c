@@ -1,14 +1,11 @@
 #include "graphics.h"
 #include "font8x8_basic.h"
+#include "string.h"
 #include <stddef.h>
 #include <stdint.h>
 
 int abs(int num) {
   return num < 0 ? -num : num;
-}
-
-__inline__ void putPixel(int x, int y, uint32_t color, struct Framebuffer fb) {
-  fb.addr[(y) * (fb.pitch / 4) + (x)] = color;
 }
 
 void drawLine(int x0, int y0, int x1, int y1, uint32_t color, struct Framebuffer fb) {

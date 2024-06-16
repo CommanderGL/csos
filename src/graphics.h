@@ -10,11 +10,16 @@ struct Framebuffer {
   int pitch;
 };
 
+#define SCREEN_WIDTH 1440
+#define SCREEN_HEIGHT 900
+
 #define CHAR_SIZE 8
 #define CHAR_SIZE_2 16
 
-// #define putPixel(x, y, color) ((uint32_t*)mbi->framebuffer_addr)[(y) * (mbi->framebuffer_pitch / 4) + (x)] = color
-__inline__ void putPixel(int x, int y, uint32_t color, struct Framebuffer fb);
+inline void putPixel(int x, int y, uint32_t color, struct Framebuffer fb) {
+  fb.addr[(y) * (fb.pitch / 4) + (x)] = color;
+}
+
 void drawLine(int x0, int y0, int x1, int y1, uint32_t color, struct Framebuffer fb);
 void drawRectOutline(int x, int y, int w, int h, uint32_t color, struct Framebuffer fb);
 void drawRectFill(int x, int y, int w, int h, uint32_t color, struct Framebuffer fb);

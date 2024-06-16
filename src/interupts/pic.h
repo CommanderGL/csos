@@ -41,7 +41,7 @@
 #define ICW4_AEOI 0x02   // Auto EOI
 #define ICW4_8086 0x01   // 80/86 Mode
 
-void remapPIC(int pic1, int pic2);
+void remapPIC();
 void maskIRQ(byte irq);
 void unmaskIRQ(byte irq);
 
