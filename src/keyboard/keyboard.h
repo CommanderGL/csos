@@ -89,8 +89,6 @@ typedef enum {
   KEYCODE_KEYPAD_PERIOD = 0x53,
   KEYCODE_F11 = 0x57,
   KEYCODE_F12 = 0x58,
-  KEYCODE_LSHIFT_RELEASE = 0xaa,
-  KEYCODE_RSHIFT_RELEASE = 0xb6,
   KEYCODE_UP = 0xe048,
   KEYCODE_DOWN = 0xe050,
   KEYCODE_LEFT = 0xe04b,
@@ -283,19 +281,16 @@ static const unsigned char keymap_shift[0xff] = {
 
 typedef enum { kbm_poll,
                kbm_interrupt } kb_mode_t;
-#define KEY_ESC 200
-#define KEY_UP 201
-#define KEY_DOWN 202
-#define KEY_PGUP 205
-#define KEY_PGDOWN 206
-#define KEY_HOME 207
-#define KEY_END 208
+
+typedef void (*kb_handler)(Scancode sc, unsigned char ch);
+
+extern kb_handler kb_handlers[0xff];
+extern int kb_handlers_length;
 
 Scancode keyboard_get_scancode(void);
 uint8_t scancode_to_keycode(Scancode sc);
 uint8_t wait_for_key(void);
 Scancode wait_for_scancode(void);
-int keyboard_mode(kb_mode_t mode);
 int keyboard_init(kb_mode_t mode);
 
 #endif
