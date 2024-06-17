@@ -10,6 +10,8 @@ struct Framebuffer {
   int pitch;
 };
 
+#define TRANSPARENT 0xee66ff
+
 #define SCREEN_WIDTH 1440
 #define SCREEN_HEIGHT 900
 
@@ -17,7 +19,7 @@ struct Framebuffer {
 #define CHAR_SIZE_2 16
 
 inline void putPixel(int x, int y, uint32_t color, struct Framebuffer fb) {
-  fb.addr[(y) * (fb.pitch / 4) + (x)] = color;
+  if (color != TRANSPARENT) fb.addr[(y) * (fb.pitch / 4) + (x)] = color;
 }
 
 void drawLine(int x0, int y0, int x1, int y1, uint32_t color, struct Framebuffer fb);
