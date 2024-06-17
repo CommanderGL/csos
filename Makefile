@@ -2,7 +2,7 @@ CC := i686-elf-gcc
 CXX := i686-elf-g++
 LD := i686-elf-ld
 
-CFLAGS := -ffreestanding -O2 -Wall -Wextra -fno-exceptions -g -pipe -D__LIMINE__
+CFLAGS := -ffreestanding -O2 -Wall -Wextra -fno-exceptions -g -pipe
 
 CFILES := $(shell cd src && find -L * -type f -name '*.c')
 CXXFILES := $(shell cd src && find -L * -type f -name '*.cpp')
