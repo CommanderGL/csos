@@ -23,5 +23,6 @@ extern void int18(void);
 extern void int19(void);
 extern void keyboard_handler(void);
 extern void timer_handler(void);
+extern void mouse_handler(void);
 
 #endif

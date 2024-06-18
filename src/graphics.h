@@ -30,6 +30,5 @@ void putChar2(unsigned char ch, int x, int y, uint32_t fg, uint32_t bg, struct F
 void print(const char* data, int x, int y, uint32_t fg, uint32_t bg, struct Framebuffer fb);
 void print2(const char* data, int x, int y, uint32_t fg, uint32_t bg, struct Framebuffer fb);
 void clr_screen(uint32_t color, struct Framebuffer fb);
-void update_framebuffer(uint32_t* dest, uint32_t* src);
 
 #endif

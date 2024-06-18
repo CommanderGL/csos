@@ -420,3 +420,23 @@ timer_handler:
      pop ds
      popa
      iret
+
+[extern mouse_handler_c]
+[global mouse_handler]
+mouse_handler:
+     pusha
+     push ds
+     push es
+     push fs
+     push gs
+     mov eax,0x10    ; Data segment
+     mov ds,eax
+     mov es,eax
+     cld
+     call mouse_handler_c
+     pop gs
+     pop fs
+     pop es
+     pop ds
+     popa
+     iret
