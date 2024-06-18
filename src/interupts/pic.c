@@ -17,20 +17,6 @@ void remapPIC() {
   outportb(0xA1, 0x00);
 }
 
-/* void maskIRQ(byte irq) {
-  if (irq == ALL) {
-    outportb(MASTERDATA, 0xFF);
-    outportb(SLAVEDATA, 0xFF);
-    return;
-  }
-  irq = irq | (1 << irq);
-  if (irq < 8) {
-    outportb(MASTERDATA, irq & 0xFF);
-    return;
-  }
-  outportb(SLAVEDATA, irq >> 8);
-} */
-
 void maskIRQ(uint8_t irq) {
   uint16_t port;
   uint8_t value;
@@ -44,20 +30,6 @@ void maskIRQ(uint8_t irq) {
   value = inportb(port) | (1 << irq);
   outportb(port, value);
 }
-
-/* void unmaskIRQ(byte irq) {
-  if (irq == ALL) {
-    outportb(MASTERDATA, 0x00);
-    outportb(SLAVEDATA, 0x00);
-    return;
-  }
-  irq = irq & (1 << irq);
-  if (irq < 8) {
-    outportb(MASTERDATA, irq & 0xFF);
-    return;
-  }
-  outportb(SLAVEDATA, irq >> 8);
-} */
 
 void unmaskIRQ(uint8_t irq) {
   uint16_t port;

@@ -3,7 +3,7 @@
 #include "../graphics.h"
 #include "../io.h"
 #include "../keyboard/keyboard.h"
-#include "../multiboot.h"
+#include "../multiboot2.h"
 #include "../string.h"
 #include "idt.h"
 #include "ints.h"
@@ -11,7 +11,7 @@
 
 extern uint32_t fb_addr[SCREEN_WIDTH * SCREEN_HEIGHT + 1];
 extern struct Framebuffer fb;
-extern multiboot_info_t* mbi;
+extern struct multiboot_tag_framebuffer* fb_info;
 
 void loadExceptions() {
   addInt(0, int00, 0);
@@ -58,7 +58,7 @@ void panic(const char* message) {
   print2(message, fb.width / 2 - strlen(message) * CHAR_SIZE_2 / 2, yOffset + CHAR_SIZE_2 * 4, CATPPUCCIN_RED, CATPPUCCIN_BASE, fb);
   print2("<SYSTEM HALTED>", fb.width / 2 - strlen("<SYSTEM HELATED>") * CHAR_SIZE_2 / 2, yOffset + CHAR_SIZE_2 * 10, CATPPUCCIN_RED, CATPPUCCIN_BASE, fb);
 
-  memcpy((uint32_t*)mbi->framebuffer_addr, fb_addr, sizeof(fb_addr));
+  memcpy((uint32_t*)fb_info->common.framebuffer_addr, fb_addr, sizeof(fb_addr));
 
   asm("cli\n");
   asm("hlt\n");
