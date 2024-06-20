@@ -1,13 +1,13 @@
 #include "exceptions.h"
-#include "../catppuccin.h"
-#include "../graphics.h"
+#include "../graphics/catppuccin.h"
+#include "../graphics/graphics.h"
 #include "../io.h"
 #include "../keyboard/keyboard.h"
 #include "../multiboot2.h"
-#include "../string.h"
 #include "idt.h"
 #include "ints.h"
 #include "pic.h"
+#include "string.h"
 
 extern uint32_t fb_addr[SCREEN_WIDTH * SCREEN_HEIGHT + 1];
 extern struct Framebuffer fb;

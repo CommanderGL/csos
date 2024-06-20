@@ -2,7 +2,6 @@
 #include "../interupts/idt.h"
 #include "../interupts/ints.h"
 #include "../io.h"
-#include "../string.h"
 
 extern struct Framebuffer direct_fb;
 

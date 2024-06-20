@@ -2,7 +2,7 @@ CC := i686-elf-gcc
 CXX := i686-elf-g++
 LD := i686-elf-ld
 
-CFLAGS := -ffreestanding -O2 -Wall -Wextra -fno-exceptions -g -pipe
+CFLAGS := -ffreestanding -O2 -Wall -Wextra -fno-exceptions -g -pipe -Iinclude
 
 CFILES := $(shell cd src && find -L * -type f -name '*.c')
 CXXFILES := $(shell cd src && find -L * -type f -name '*.cpp')
@@ -37,11 +37,22 @@ geniso:
 	grub-mkrescue -o bin/csos.iso isodir
 	rm -rf isodir
 
+ovmf:
+	mkdir -p ovmf
+	cd ovmf && curl -Lo OVMF.fd https://retrage.github.io/edk2-nightly/bin/RELEASEX64_OVMF.fd
+
 dev: all geniso
-	qemu-system-i386 -cdrom bin/csos.iso -display sdl
+	qemu-system-x86_64 -cdrom bin/csos.iso -display sdl
+
+dev-uefi: all geniso ovmf
+	qemu-system-x86_64 -bios ovmf/OVMF.fd -cdrom bin/csos.iso -display sdl
 
 dev-gdb: all geniso
-	qemu-system-i386 -cdrom bin/csos.iso -display sdl -s -S &
+	qemu-system-x84_64 -cdrom bin/csos.iso -display sdl -s -S &
+	gdb vmlinux
+
+dev-uefi-gdb: all geniso ovmf
+	qemu-system-x86_64 -bios ovmf/OVMF.fd -cdrom bin/csos.iso -display sdl -s -S &
 	gdb vmlinux
 
 clean:

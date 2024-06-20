@@ -1,13 +1,13 @@
-#include "catppuccin.h"
-#include "graphics.h"
+#include "graphics/catppuccin.h"
+#include "graphics/graphics.h"
 #include "interupts/exceptions.h"
 #include "interupts/idt.h"
 #include "interupts/pic.h"
 #include "io.h"
-#include "itoa.h"
 #include "keyboard/keyboard.h"
 #include "mouse/mouse.h"
 #include "multiboot2.h"
+#include "stdlib.h"
 #include "string.h"
 #include "term.h"
 #include "timer/timer.h"
@@ -63,8 +63,6 @@ void kernel_main(unsigned long magic, multiboot_uint8_t* addr) {
   }
   if (fb_info == NULL) asm("hlt");
 
-  int* a = &endkernel;
-
   fb.addr = fb_addr;
   fb.width = SCREEN_WIDTH;
   fb.height = SCREEN_HEIGHT;
@@ -96,11 +94,8 @@ void kernel_main(unsigned long magic, multiboot_uint8_t* addr) {
   drawRectOutline(fb.width - 100 - 10, 10, 100, 50, CATPPUCCIN_SURFACE1, fb);
   drawRectFill(fb.width - 50 - 10, 10 + 50 + 10, 50, 100, CATPPUCCIN_GREEN, fb);
   print2("Hello, World!", fb.width - 10 - 13 * CHAR_SIZE_2, fb.height - 10 - CHAR_SIZE_2, CATPPUCCIN_TEXT, CATPPUCCIN_BASE, fb);
-  print("Hello, World!", fb.width - 10 - 13 * CHAR_SIZE, fb.height - 10 - CHAR_SIZE_2 - 10 - CHAR_SIZE, CATPPUCCIN_TEXT, CATPPUCCIN_BASE, fb);
-
-  char str[100];
-  print2(itoa((uint32_t)&endkernel, str, 16), 10, 10 + CHAR_SIZE_2 * 2, CATPPUCCIN_YELLOW, CATPPUCCIN_BASE, fb);
-  print2(itoa((uint32_t)&fb, str, 16), 10, 10 + CHAR_SIZE_2 * 3, CATPPUCCIN_YELLOW, CATPPUCCIN_BASE, fb);
+  print("Hello, World!", fb.width - 10 - 13 * CHAR_SIZE, fb.height - 10 - CHAR_SIZE_2 - CHAR_SIZE, CATPPUCCIN_TEXT, CATPPUCCIN_BASE, fb);
+  // drawCircle(25, 10, SCREEN_HEIGHT - 60, CATPPUCCIN_PEACH, fb);
 
   memcpy((uint32_t*)fb_info->common.framebuffer_addr, fb_addr, sizeof(fb_addr));
 

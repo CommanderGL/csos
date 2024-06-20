@@ -1,5 +1,5 @@
-#include "../catppuccin.h"
-#include "../graphics.h"
+#include "../graphics/catppuccin.h"
+#include "../graphics/graphics.h"
 #include "../types.h"
 
 #ifndef MOUSE_H
