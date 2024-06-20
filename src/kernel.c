@@ -4,6 +4,7 @@
 #include "interupts/idt.h"
 #include "interupts/pic.h"
 #include "io.h"
+#include "itoa.h"
 #include "keyboard/keyboard.h"
 #include "mouse/mouse.h"
 #include "multiboot2.h"
@@ -21,6 +22,8 @@
 #if !defined(__i386__)
 #error "This OS needs to be compiled with a ix86-elf compiler"
 #endif
+
+extern void endkernel;
 
 multiboot_uint8_t* mbi;
 struct multiboot_tag_framebuffer* fb_info = NULL;
@@ -41,7 +44,7 @@ void test_handler(Scancode sc, unsigned char ch) {
 bool interval_toggle = false;
 void test_interval() {
   interval_toggle = !interval_toggle;
-  drawRectFill(SCREEN_WIDTH - 85, 250, 25, 50, interval_toggle ? CATPPUCCIN_SKY : CATPPUCCIN_BLUE, fb);
+  drawRectFill(SCREEN_WIDTH - 35, 180, 25, 50, interval_toggle ? CATPPUCCIN_SKY : CATPPUCCIN_BLUE, fb);
   memcpy((uint32_t*)fb_info->common.framebuffer_addr, fb_addr, sizeof(fb_addr));
   draw_cursor();
 }
@@ -59,6 +62,8 @@ void kernel_main(unsigned long magic, multiboot_uint8_t* addr) {
     tag = (struct multiboot_tag*)((multiboot_uint8_t*)tag + ((tag->size + 7) & ~7));
   }
   if (fb_info == NULL) asm("hlt");
+
+  int* a = &endkernel;
 
   fb.addr = fb_addr;
   fb.width = SCREEN_WIDTH;
@@ -92,6 +97,10 @@ void kernel_main(unsigned long magic, multiboot_uint8_t* addr) {
   drawRectFill(fb.width - 50 - 10, 10 + 50 + 10, 50, 100, CATPPUCCIN_GREEN, fb);
   print2("Hello, World!", fb.width - 10 - 13 * CHAR_SIZE_2, fb.height - 10 - CHAR_SIZE_2, CATPPUCCIN_TEXT, CATPPUCCIN_BASE, fb);
   print("Hello, World!", fb.width - 10 - 13 * CHAR_SIZE, fb.height - 10 - CHAR_SIZE_2 - 10 - CHAR_SIZE, CATPPUCCIN_TEXT, CATPPUCCIN_BASE, fb);
+
+  char str[100];
+  print2(itoa((uint32_t)&endkernel, str, 16), 10, 10 + CHAR_SIZE_2 * 2, CATPPUCCIN_YELLOW, CATPPUCCIN_BASE, fb);
+  print2(itoa((uint32_t)&fb, str, 16), 10, 10 + CHAR_SIZE_2 * 3, CATPPUCCIN_YELLOW, CATPPUCCIN_BASE, fb);
 
   memcpy((uint32_t*)fb_info->common.framebuffer_addr, fb_addr, sizeof(fb_addr));
 
