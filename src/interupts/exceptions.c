@@ -3,15 +3,14 @@
 #include "../graphics/graphics.h"
 #include "../io.h"
 #include "../keyboard/keyboard.h"
-#include "../multiboot2.h"
 #include "idt.h"
 #include "ints.h"
 #include "pic.h"
 #include "string.h"
+#include <stdint.h>
 
-extern uint32_t fb_addr[SCREEN_WIDTH * SCREEN_HEIGHT + 1];
 extern struct Framebuffer fb;
-extern struct multiboot_tag_framebuffer* fb_info;
+extern struct Framebuffer direct_fb;
 
 void loadExceptions() {
   addInt(0, int00, 0);
@@ -53,12 +52,12 @@ void panic(const char* message) {
   const int lines = 11;
   const int yOffset = fb.height / 2 - lines * CHAR_SIZE_2 / 2;
 
-  print2("<SYSTEM ERROR>", fb.width / 2 - strlen("<SYSTEM ERROR>") * CHAR_SIZE_2 / 2, yOffset, CATPPUCCIN_RED, CATPPUCCIN_BASE, fb);
-  print2("An exception Has Occured (your system has messed up):", fb.width / 2 - strlen("An exception Has Occured (your system has messed up):") * CHAR_SIZE_2 / 2, yOffset + CHAR_SIZE_2 * 2, CATPPUCCIN_RED, CATPPUCCIN_BASE, fb);
-  print2(message, fb.width / 2 - strlen(message) * CHAR_SIZE_2 / 2, yOffset + CHAR_SIZE_2 * 4, CATPPUCCIN_RED, CATPPUCCIN_BASE, fb);
-  print2("<SYSTEM HALTED>", fb.width / 2 - strlen("<SYSTEM HELATED>") * CHAR_SIZE_2 / 2, yOffset + CHAR_SIZE_2 * 10, CATPPUCCIN_RED, CATPPUCCIN_BASE, fb);
+  print2("<SYSTEM ERROR>", fb.width / 2 - strlen("<SYSTEM ERROR>") * CHAR_SIZE_2 / 2, yOffset, CATPPUCCIN_RED, TRANSPARENT, fb);
+  print2("An exception Has Occured (your system has messed up):", fb.width / 2 - strlen("An exception Has Occured (your system has messed up):") * CHAR_SIZE_2 / 2, yOffset + CHAR_SIZE_2 * 2, CATPPUCCIN_RED, TRANSPARENT, fb);
+  print2(message, fb.width / 2 - strlen(message) * CHAR_SIZE_2 / 2, yOffset + CHAR_SIZE_2 * 4, CATPPUCCIN_RED, TRANSPARENT, fb);
+  print2("<SYSTEM HALTED>", fb.width / 2 - strlen("<SYSTEM HELATED>") * CHAR_SIZE_2 / 2, yOffset + CHAR_SIZE_2 * 10, CATPPUCCIN_RED, TRANSPARENT, fb);
 
-  memcpy((uint32_t*)fb_info->common.framebuffer_addr, fb_addr, sizeof(fb_addr));
+  memcpy(direct_fb.addr, fb.addr, SCREEN_WIDTH * SCREEN_HEIGHT * sizeof(uint32_t));
 
   asm("cli\n");
   asm("hlt\n");
